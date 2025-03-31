@@ -108,7 +108,7 @@ class For4PaymentsAPI:
                 "paymentMethod": "PIX",
                 "amount": amount_in_cents,
                 "items": [{
-                    "title": "Taxa de Inscrição ENCCEJA 2025",
+                    "title": "Curso: IA DO FUTURO",
                     "quantity": 1,
                     "unitPrice": amount_in_cents,
                     "tangible": False
@@ -282,7 +282,7 @@ class For4PaymentsAPI:
                 'cpf': cpf,
                 'amount': amount,
                 'phone': phone,
-                'description': 'Taxa de inscrição ENCCEJA 2025'
+                'description': 'Curso: IA DO FUTURO'
             }
             
             current_app.logger.info("Chamando API de pagamento PIX")
