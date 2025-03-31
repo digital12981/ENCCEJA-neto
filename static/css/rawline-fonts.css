@@ -1,0 +1,81 @@
+/* Rawline Fonts */
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-400.ea42a37247439622.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-500.f8af4ec801afaa28.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-600.844a17f0db94d147.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-700.1c7c76152b40409f.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-800.5c5f78761d00551b.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('../fonts/rawline-400i.1701033bc0b08320.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+.rawline-font {
+    font-family: 'Rawline', sans-serif;
+}
+
+body, html {
+    font-family: 'Rawline', sans-serif;
+}
+
+.rawline-regular {
+    font-family: 'Rawline', sans-serif;
+    font-weight: 400;
+}
+
+.rawline-medium {
+    font-family: 'Rawline', sans-serif;
+    font-weight: 500;
+}
+
+.rawline-semibold {
+    font-family: 'Rawline', sans-serif;
+    font-weight: 600;
+}
+
+.rawline-bold {
+    font-family: 'Rawline', sans-serif;
+    font-weight: 700;
+}
+
+.rawline-extrabold {
+    font-family: 'Rawline', sans-serif;
+    font-weight: 800;
+}

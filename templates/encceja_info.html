@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>ENCCEJA 2025 - Informações Importantes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rawline-fonts.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gov-header {
+            background-color: #222222;
+        }
+        .inep-header {
+            background-color: #044785;
+        }
+        .form-header {
+            background-color: #2c5985;
+            color: white;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: #5d85ab;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #4d7396;
+        }
+        .footer-bg {
+            background-color: #1c2b39;
+        }
+        .info-box {
+            border-left: 4px solid #2c5985;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar dados do usuário e endereço
+            const userData = JSON.parse(localStorage.getItem('cpfData') || '{}');
+            
+            if (!userData.cpf) {
+                // Redirecionar para o início se não tiver os dados do usuário
+                window.location.href = '/inscricao';
+                return;
+            }
+
+            // Exibir informações do candidato
+            document.getElementById('cpf-display').textContent = userData.cpf;
+            document.getElementById('nome-display').textContent = userData.nome;
+        });
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Government Header -->
+    <header class="gov-header text-white py-2">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <a class="font-bold text-sm" href="#">
+                <img src="https://i.ibb.co/TDkn2RR4/Imagem-29-03-2025-a-s-17-32.jpg" alt="Logotipo do Brasil" class="h-6" />
+            </a>
+            <nav>
+                <ul class="flex space-x-4 text-[10px]">
+                    <li>
+                        <a class="hover:underline" href="#">ACESSO À INFORMAÇÃO</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">PARTICIPE</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">SERVIÇOS</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- INEP Header -->
+    <div class="inep-header py-3">
+        <div class="container mx-auto px-4">
+            <svg class="h-7" height="30" preserveAspectRatio="xMidYMid" viewBox="0 0 69 20" width="120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <style>
+                        .cls-2{fill:#fff}
+                    </style>
+                </defs>
+                <path class="cls-2" d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" fill-rule="evenodd" id="path-1"/>
+            </svg>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <main class="flex-grow py-8">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <!-- ENCCEJA Logo -->
+            <div class="text-center mb-6">
+                <img alt="Logo ENCCEJA 2025" class="mx-auto" height="100" src="https://lh4.googleusercontent.com/proxy/_9Y0LIQJY1EdBdBVxy9MNsDDxrwGhfi2sjqj0zyi8ozsQS0eaxz82ZcL248lfPHCGJ3N07JVCIidVaFuR9pcnZNvpdEzt9bcLzGuHf9h09CpscRLpaqVYz0" width="420"/>
+            </div>
+            <!-- Info Container -->
+            <div class="border border-gray-300 rounded">
+                <!-- Form Header -->
+                <div class="form-header py-2 px-4 text-center">
+                    <h2 class="text-lg">
+                        Inscrição &gt; Informações do Exame
+                    </h2>
+                </div>
+                <!-- Content -->
+                <div class="p-6">
+                    <div class="bg-[#2B5984] p-4 rounded-md mb-5 text-white shadow-md">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-2">
+                                <p class="text-sm text-gray-200">CPF:</p>
+                                <p id="cpf-display" class="font-semibold text-shadow">...</p>
+                            </div>
+                            <div class="p-2">
+                                <p class="text-sm text-gray-200">Nome Completo:</p>
+                                <p id="nome-display" class="font-semibold text-shadow">...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-[#044785] mb-4">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Informações Importantes sobre o ENCCEJA 2025
+                        </h3>
+                        
+
+                        
+                        <div class="space-y-5">
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#2c5985]">Nível Fácil</h4>
+                                <p class="text-gray-700 mb-2">O ENCCEJA 2025 possui nível fácil de dificuldade. A prova apresenta questões contextualizadas com situações do dia a dia, tornando mais fácil a resolução para todos os candidatos.</p>
+                            </div>
+                            
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#2c5985]">Estrutura da Prova</h4>
+                                <p class="text-gray-700 mb-2">Cada área contém apenas 30 questões objetivas. Para aprovação, basta acertar 15 questões (50% da prova). Uma estrutura simples e direta para certificação.</p>
+                            </div>
+                            
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#2c5985]">Prazo para Certificação</h4>
+                                <p class="text-gray-700 mb-2">Após a divulgação dos resultados, o certificado de conclusão do Ensino Fundamental ou Médio é emitido em menos de 30 dias. Rápido e sem burocracia.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-red-50 p-4 rounded-md border border-red-300 text-red-800 mt-6">
+                            <p class="flex items-start">
+                                <i class="fas fa-exclamation-triangle text-red-600 mr-2 mt-1"></i>
+                                <span>
+                                    <strong>ATENÇÃO:</strong> Sua inscrição ainda não foi confirmada devido à falta de pagamento da Taxa de Inscrição. Para garantir sua participação no exame, é necessário efetuar o pagamento imediatamente.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-300 pt-5 mt-5">
+                        <div class="flex justify-center">
+                            <button id="pagar-button" class="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-md flex items-center justify-center transition-all">
+                                <i class="fas fa-credit-card mr-2"></i>
+                                <span>Pagar Taxa e Concluir</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal de Pagamento -->
+                    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+                        <div class="bg-white rounded-md p-6 shadow-lg w-[450px] max-w-full mx-4">
+                            <div class="mb-4 text-center">
+                                <div class="bg-red-100 p-3 rounded-full inline-flex items-center justify-center mb-3">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900">AVISO IMPORTANTE</h3>
+                            </div>
+                            
+                            <div class="mb-5 text-gray-700">
+                                <p class="mb-3">Ao prosseguir, você concorda em adicionar seu CPF na lista de participantes do ENCCEJA 2025 e se compromete a realizar o pagamento obrigatório de <strong class="text-red-600">R$ 73,40</strong>.</p>
+                                
+                                <p class="mb-3"><strong>ATENÇÃO:</strong> Caso você não realize o pagamento até a data de vencimento, será <strong>impedido de participar</strong> do ENCCEJA neste ano e nos próximos 2 anos.</p>
+                                
+                                <div class="bg-yellow-50 p-3 border border-yellow-200 rounded-md">
+                                    <p class="text-yellow-800"><strong>Importante:</strong> O pagamento é obrigatório para confirmar sua inscrição.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col space-y-3">
+                                <button id="confirm-payment" class="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">
+                                    Vou realizar o pagamento
+                                </button>
+                                <button id="cancel-payment" class="w-full px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                                    Não quero diploma de Ensino Médio
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Obter referências para elementos do DOM
+                            const pagarButton = document.getElementById('pagar-button');
+                            const paymentModal = document.getElementById('payment-modal');
+                            const cancelPaymentButton = document.getElementById('cancel-payment');
+                            const confirmPaymentButton = document.getElementById('confirm-payment');
+                            
+                            // Mostrar o modal quando clicar no botão "Pagar Taxa e Concluir"
+                            pagarButton.addEventListener('click', function() {
+                                paymentModal.classList.remove('hidden');
+                            });
+                            
+                            // Fechar o modal ao clicar em "Cancelar"
+                            cancelPaymentButton.addEventListener('click', function() {
+                                paymentModal.classList.add('hidden');
+                            });
+                            
+                            // Processar pagamento ao clicar em "Vou realizar o pagamento"
+                            confirmPaymentButton.addEventListener('click', function() {
+                                // Adicionar classe para feedback visual
+                                confirmPaymentButton.classList.add('opacity-75', 'cursor-not-allowed');
+                                confirmPaymentButton.disabled = true;
+                                
+                                // Mostrar um indicador de carregamento no botão
+                                const originalText = confirmPaymentButton.innerHTML;
+                                confirmPaymentButton.innerHTML = '<div class="flex items-center"><div class="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div> Processando...</div>';
+                                
+                                // Obter dados do usuário
+                                const userData = JSON.parse(localStorage.getItem('cpfData') || '{}');
+                                const addressData = JSON.parse(localStorage.getItem('enderecoData') || '{}');
+                                
+                                const paymentData = {
+                                    nome: userData.nome,
+                                    cpf: userData.cpf,
+                                    telefone: addressData.telefone
+                                };
+                                
+                                // Salvar dados para uso na página de pagamento
+                                localStorage.setItem('paymentData', JSON.stringify(paymentData));
+                                
+                                // Redirecionar para a página de pagamento após um breve delay
+                                setTimeout(function() {
+                                    window.location.href = '/pagamento';
+                                }, 1000);
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="footer-bg text-white py-4 text-xs">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="69" height="20" viewBox="0 0 69 20" class="h-16 w-auto mb-3">
+                    <defs><style>.cls-2{fill:#fff}</style></defs>
+                    <path d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" id="path-1" class="cls-2" fill-rule="evenodd"/>
+                </svg>
+                <p class="text-sm text-center mb-2">Instituto Nacional de Estudos e Pesquisas Educacionais</p>
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    © MEC - Ministério da Educação | INEP - Instituto Nacional de Estudos e Pesquisas
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt mr-1"></i>
+                    0800 616161
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

